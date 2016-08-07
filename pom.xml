@@ -4,7 +4,7 @@
 
 	<groupId>net.ljcomputing</groupId>
 	<artifactId>utility</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>LJ Computing - Utility</name>
 	<description>LJ Computing Utility</description>
@@ -39,7 +39,8 @@
 		<url>https://github.com/${github.username}/${project.groupId}.${project.artifactId}</url>
 		<connection>scm:git:ssh://git@github.com/${github.username}/${project.groupId}.${project.artifactId}.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/${github.username}/${project.groupId}.${project.artifactId}.git</developerConnection>
-	</scm>
+	  <tag>HEAD</tag>
+  </scm>
 
 	<distributionManagement>
 
