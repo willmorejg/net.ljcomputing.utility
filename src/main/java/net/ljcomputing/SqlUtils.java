@@ -27,6 +27,29 @@ public final class SqlUtils {
 
   /** The Constant AT_LEAST_ONE - suggested by PMD plugin. */
   private final static int AT_LEAST_ONE = 1;
+  
+  /** The Constant COMMA - suggested by PMD plugin. */
+  private final static char COMMA = ',';
+  
+  /** The Constant QUESTION_MARK - suggested by PMD plugin. */
+  private final static char QUESTION_MARK = '?';
+  
+  /** The Constant EQUALS - suggested by PMD plugin. */
+  private final static char EQUALS = '=';
+  
+  /** The Constant WHERE - suggested by PMD plugin. */
+  private final static String WHERE = " where ";
+  
+  /** The Constant SET - suggested by PMD plugin. */
+  private final static String SET = " set ";
+  
+  /** The Constant VALUES_TOKEN - suggested by PMD plugin. */
+  private final static String VALUES_TOKEN = " values(";
+  
+  /**
+   * Instantiates a new sql utils.
+   */
+  private SqlUtils() {}
 
   /**
    * Builds the columns values used in various SQL statements based upon the given columns.
@@ -37,8 +60,8 @@ public final class SqlUtils {
   private static String buildColumns(final String... columns) {
     final StringBuffer buf = new StringBuffer();
 
-    for (String column : columns) {
-      buf.append(column).append(',');
+    for (final String column : columns) {
+      buf.append(column).append(COMMA);
     }
 
     if (buf.length() > AT_LEAST_ONE) {
@@ -57,9 +80,8 @@ public final class SqlUtils {
   private static String buildPlaceholders(final String... columns) {
     final StringBuffer buf = new StringBuffer();
 
-    for (@SuppressWarnings("unused")
-    String column : columns) {
-      buf.append("?,");
+    for (int c = 0; c < columns.length; c++) {
+      buf.append(QUESTION_MARK).append(COMMA);
     }
 
     if (buf.length() > AT_LEAST_ONE) {
@@ -78,8 +100,8 @@ public final class SqlUtils {
   private static String buildSetColumnValues(final String... columns) {
     final StringBuffer buf = new StringBuffer();
 
-    for (String column : columns) {
-      buf.append(column).append("=?,");
+    for (final String column : columns) {
+      buf.append(column).append(EQUALS).append(QUESTION_MARK).append(COMMA);
     }
 
     if (buf.length() > AT_LEAST_ONE) {
@@ -101,7 +123,7 @@ public final class SqlUtils {
     final StringBuffer buf = new StringBuffer("insert into ");
 
     buf.append(table).append('(').append(buildColumns(columns)).append(')')
-        .append(" values(").append(buildPlaceholders(columns)).append(')');
+        .append(VALUES_TOKEN).append(buildPlaceholders(columns)).append(')');
 
     return buf.toString();
   }
@@ -118,8 +140,8 @@ public final class SqlUtils {
       final String primaryKeyColumn, final String... columns) {
     final StringBuffer buf = new StringBuffer("update ");
 
-    buf.append(table).append(" set ").append(buildSetColumnValues(columns))
-        .append(" where ").append(buildSetColumnValues(primaryKeyColumn));
+    buf.append(table).append(SET).append(buildSetColumnValues(columns))
+        .append(WHERE).append(buildSetColumnValues(primaryKeyColumn));
 
     return buf.toString();
   }
@@ -135,7 +157,7 @@ public final class SqlUtils {
       final String primaryKeyColumn) {
     final StringBuffer buf = new StringBuffer("delete from ");
 
-    buf.append(table).append(" where ")
+    buf.append(table).append(WHERE)
         .append(buildSetColumnValues(primaryKeyColumn));
 
     return buf.toString();

@@ -24,57 +24,58 @@ import java.util.Locale;
  * @author James G. Willmore
  * 
  */
-public class StringUtils {
+public final class StringUtils {
+  
+  /** The recognized separators. */
+  private final static char[] SEPARATORS = new char[] { '_', '.' };
 
   /**
-   * <p>Return the camel case representation the incoming String.
-   * </p>
-   * <p>NOTE: this method will return a camel case representation of the String
-   * suitable for various concatenation algorithms.
-   * </p>
-   * <p>For example, "Yearly Income" becomes "YearlyIncome", which in turn could be
-   * used to create another String "getYearlyIncome".
-   * </p>
+   * Instantiates a new string utils.
+   */
+  private StringUtils() {
+  }
+
+  /**
+   * <p>Return the camel case representation the incoming String. </p> <p>NOTE:
+   * this method will return a camel case representation of the String suitable
+   * for various concatenation algorithms. </p> <p>For example, "Yearly Income"
+   * becomes "YearlyIncome", which in turn could be used to create another
+   * String "getYearlyIncome". </p>
    *
-   * @param value the value
+   * @param value the value @return the string
    * @return the string
    */
-  public static final String toCamelCase(final String value) {
+  public static String toCamelCase(final String value) {
     return camelCase(value.toLowerCase(Locale.ENGLISH));
   }
 
   /**
-   * <p>Return the camel case representation the incoming String.
-   * </p>
-   * <p>NOTE: this method will return a camel case representation of the String
-   * suitable for various concatenation algorithms.
-   * </p>
-   * <p>For example, "Yearly Income" becomes "YearlyIncome", which in turn could be
-   * used to create another String "getYearlyIncome".
-   * </p>
+   * <p>Return the camel case representation the incoming String. </p> <p>NOTE:
+   * this method will return a camel case representation of the String suitable
+   * for various concatenation algorithms. </p> <p>For example, "Yearly Income"
+   * becomes "YearlyIncome", which in turn could be used to create another
+   * String "getYearlyIncome". </p>
    *
    * @param value the value
    * @return the string
    */
-  private static final String camelCase(final String value) {
-    boolean separatorPresent = false;
+  private static String camelCase(final String value) {
     final StringBuffer buf = new StringBuffer();
 
-    if (null != value && !value.trim().isEmpty()) {
-      final char[] separators = new char[] { '_', '.' };
+    if (value != null && !value.trim().isEmpty()) { 
       final char[] chars = value.trim().toCharArray();
-
+      
       buf.append(String.valueOf(chars[0]).toUpperCase(Locale.ENGLISH));
 
       for (int i = 1; i < chars.length;) {
-        separatorPresent = separatorPresent
-            && isSeparator(chars[i], separators);
-        if (!isSeparator(chars[i], separators)) {
+        final boolean foundSeparator = isSeparator(chars[i]);
+        
+        if (!foundSeparator) { 
           buf.append(chars[i]);
-        } else {
-          if (i < chars.length) {
-            buf.append(String.valueOf(chars[++i]).toUpperCase(Locale.ENGLISH));
-          }
+        }
+        
+        if (foundSeparator && i < chars.length) {
+          buf.append(String.valueOf(chars[++i]).toUpperCase(Locale.ENGLISH));
         }
 
         i++;
@@ -87,15 +88,14 @@ public class StringUtils {
   /**
    * Checks if is separator.
    *
-   * @param ch the ch
-   * @param separators the separators
+   * @param character the character
    * @return true, if is separator
    */
-  private static boolean isSeparator(final char ch, final char... separators) {
+  private static boolean isSeparator(final char character) {
     boolean result = false;
 
-    for (final char check : separators) {
-      if (check == ch) {
+    for (final char check : SEPARATORS) {
+      if (check == character) {
         result = true;
         break;
       }
@@ -105,36 +105,30 @@ public class StringUtils {
   }
 
   /**
-   * <p>Return the member case representation the incoming String.
-   * </p>
-   * <p>NOTE: this method will return a member case representation of the String
-   * suitable for various uses of java.reflect.*.
-   * </p>
-   * <p>For example, "Yearly Income" becomes "yearlyIncome", which in turn could be
-   * used to access a Class' member field called by the same name.
-   * </p>
+   * <p>Return the member case representation the incoming String. </p> <p>NOTE:
+   * this method will return a member case representation of the String suitable
+   * for various uses of java.reflect.*. </p> <p>For example, "Yearly Income"
+   * becomes "yearlyIncome", which in turn could be used to access a Class'
+   * member field called by the same name. </p>
    *
    * @param value the value
    * @return the string
    */
-  public static final String toMemberCase(final String value) {
+  public static String toMemberCase(final String value) {
     return memberCase(value.toLowerCase(Locale.ENGLISH));
   }
 
   /**
-   * <p>Return the member case representation the incoming String.
-   * </p>
-   * <p>NOTE: this method will return a member case representation of the String
-   * suitable for various uses of java.reflect.*.
-   * </p>
-   * <p>For example, "Yearly Income" becomes "yearlyIncome", which in turn could be
-   * used to access a Class' member field called by the same name.
-   * </p>
+   * <p>Return the member case representation the incoming String. </p> <p>NOTE:
+   * this method will return a member case representation of the String suitable
+   * for various uses of java.reflect.*. </p> <p>For example, "Yearly Income"
+   * becomes "yearlyIncome", which in turn could be used to access a Class'
+   * member field called by the same name. </p>
    *
    * @param value the value
    * @return the string
    */
-  private static final String memberCase(final String value) {
+  private static String memberCase(final String value) {
     final StringBuffer buf = new StringBuffer();
 
     buf.append(camelCase(value));
