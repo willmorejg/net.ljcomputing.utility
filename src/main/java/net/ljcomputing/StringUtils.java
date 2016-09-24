@@ -25,7 +25,7 @@ import java.util.Locale;
  * 
  */
 public final class StringUtils {
-  
+
   /** The recognized separators. */
   private final static char[] SEPARATORS = new char[] { '_', '.' };
 
@@ -45,7 +45,7 @@ public final class StringUtils {
    * @param value the value @return the string
    * @return the string
    */
-  public static String toCamelCase(final String value) {
+  public static final String toCamelCase(final String value) {
     return camelCase(value.toLowerCase(Locale.ENGLISH));
   }
 
@@ -62,18 +62,18 @@ public final class StringUtils {
   private static String camelCase(final String value) {
     final StringBuffer buf = new StringBuffer();
 
-    if (value != null && !value.trim().isEmpty()) { 
+    if (value != null && !value.trim().isEmpty()) {
       final char[] chars = value.trim().toCharArray();
-      
+
       buf.append(String.valueOf(chars[0]).toUpperCase(Locale.ENGLISH));
 
       for (int i = 1; i < chars.length;) {
         final boolean foundSeparator = isSeparator(chars[i]);
-        
-        if (!foundSeparator) { 
+
+        if (!foundSeparator) {
           buf.append(chars[i]);
         }
-        
+
         if (foundSeparator && i < chars.length) {
           buf.append(String.valueOf(chars[++i]).toUpperCase(Locale.ENGLISH));
         }
@@ -114,7 +114,7 @@ public final class StringUtils {
    * @param value the value
    * @return the string
    */
-  public static String toMemberCase(final String value) {
+  public static final String toMemberCase(final String value) {
     return memberCase(value.toLowerCase(Locale.ENGLISH));
   }
 
@@ -135,5 +135,15 @@ public final class StringUtils {
     buf.replace(0, 1, buf.substring(0, 1).toLowerCase(Locale.ENGLISH));
 
     return buf.toString();
+  }
+  
+  /**
+   * Checks if the given String value is null, or is equal to an empty String <i>when trimmed</i>.
+   *
+   * @param value the value
+   * @return true, if is null, or empty when trimmed
+   */
+  public static final boolean isNullOrEmpty(final String value) {
+    return value == null || "".equals(value.trim());
   }
 }
